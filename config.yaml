@@ -1,0 +1,7 @@
+db:
+  name: postgres
+  host: 127.0.0.1
+  port: 5432
+  user: ic
+  db_name: ic
+  password: ic_password
