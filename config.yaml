@@ -5,3 +5,7 @@ db:
   user: ic
   db_name: ic
   password: ic_password
+  sslmode: disable
+admin:
+  username: ic
+  password: ic_password
