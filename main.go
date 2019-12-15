@@ -3,15 +3,28 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
+	"github.com/cildhdi/In-charge/auth"
 	_ "github.com/cildhdi/In-charge/models"
+	"github.com/cildhdi/In-charge/router"
+	user "github.com/cildhdi/In-charge/router/api"
+	"github.com/cildhdi/In-charge/utils"
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+	mainRouter := gin.Default()
+
+	mainRouter.GET("/status", router.Status)
+	apiGroup := mainRouter.Group("/api")
+
+	apiGroup.POST("/login", user.Login)
+	apiGroup.POST("/send-code", user.SendVerificationCode)
+
+	authMiddleware := auth.GetMiddleware()
+	authGroup := apiGroup.Group("/auth")
+	authGroup.Use(authMiddleware.MiddlewareFunc())
+	authGroup.GET("/test", func(ctx *gin.Context) {
+		utils.Success(ctx, nil)
 	})
-	r.Run()
+
+	mainRouter.Run()
 }

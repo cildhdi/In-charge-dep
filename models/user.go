@@ -5,18 +5,24 @@ import (
 )
 
 const (
-	MerChantUser uint = 1
-	CustomerUser uint = 2
+	CustomerUser = iota
+	MerChantUser
+	AdminUser
+	SuperUser
 )
 
-var UserType map[uint]string = map[uint]string{
+var UserType map[int]string = map[int]string{
+	SuperUser:    "超级用户",
+	AdminUser:    "管理员",
 	MerChantUser: "商家",
 	CustomerUser: "顾客",
 }
 
 type IcUser struct {
 	gorm.Model
-	Phone  string `gorm:"not null;unique"`
-	Name   string
-	Points *int `gorm:"default:0"`
+	Phone     string `gorm:"not null;unique"`
+	Name      string
+	Role      *int `gorm:"default:0;not null"`
+	Points    *int `gorm:"default:0"`
+	AvatarUrl string
 }

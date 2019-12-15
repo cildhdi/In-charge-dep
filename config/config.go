@@ -18,8 +18,11 @@ type Cfg struct {
 	}
 
 	AdminCfg struct {
-		Username string
-		Password string
+		Phone string
+	}
+
+	Auth struct {
+		SecretKey string
 	}
 }
 
@@ -42,9 +45,10 @@ func init() {
 	icCfg.DatabaseCfg.SSLMode = cfg.UString("db.sslmode", "disable")
 
 	//admin
-	icCfg.AdminCfg.Username = cfg.UString("admin.username", "ic")
-	icCfg.AdminCfg.Password = cfg.UString("admin.password", "ic_password")
+	icCfg.AdminCfg.Phone = cfg.UString("admin.phone", "12345678900")
 
+	//auth
+	icCfg.Auth.SecretKey = cfg.UString("auth.secret", "ic_secret_key")
 }
 
 func IcCfg() *Cfg {

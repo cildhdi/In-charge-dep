@@ -1,0 +1,22 @@
+version: '2'
+services:
+  pg:
+    image: postgres:latest
+    environment: 
+      - "POSTGRES_PASSWORD=ic_password"
+      - "POSTGRES_USER=ic"
+      - "POSTGRES_DB=ic"
+    volumes: 
+      - "$HOME/icdata:/var/lib/postgresql/data"
+    ports: 
+      - "5432:5432"
+  pdadmin:
+    image: dpage/pgadmin4
+    environment: 
+      - "PGADMIN_DEFAULT_EMAIL=ic"
+      - "PGADMIN_DEFAULT_PASSWORD=ic_password"
+      - "PGADMIN_LISTEN_PORT=80"
+    links: 
+      - pg
+    ports: 
+      - "2345:80"

@@ -2,9 +2,10 @@ package models
 
 import (
 	"fmt"
-	"github.com/cildhdi/In-charge/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	"github.com/cildhdi/In-charge/config"
 )
 
 var db *gorm.DB
@@ -19,6 +20,10 @@ func init() {
 		panic(err)
 	}
 	//migrates
+
+	db.AutoMigrate(&IcUser{})
+	db.AutoMigrate(&VerificationCode{})
+
 }
 
 func IcDb() *gorm.DB {

@@ -7,5 +7,6 @@ db:
   password: ic_password
   sslmode: disable
 admin:
-  username: ic
-  password: ic_password
+  phone: 12345678900
+auth:
+  secret: ic_secret_key
