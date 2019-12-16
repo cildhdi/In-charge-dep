@@ -6,7 +6,7 @@ import (
 	"github.com/cildhdi/In-charge/auth"
 	_ "github.com/cildhdi/In-charge/models"
 	"github.com/cildhdi/In-charge/router"
-	user "github.com/cildhdi/In-charge/router/api"
+	api "github.com/cildhdi/In-charge/router/api"
 	"github.com/cildhdi/In-charge/utils"
 )
 
@@ -16,8 +16,10 @@ func main() {
 	mainRouter.GET("/status", router.Status)
 	apiGroup := mainRouter.Group("/api")
 
-	apiGroup.POST("/login", user.Login)
-	apiGroup.POST("/send-code", user.SendVerificationCode)
+	apiGroup.POST("/login", api.Login)
+	apiGroup.POST("/admin-register", api.SuperRegister)
+	apiGroup.POST("/register", api.Register)
+	apiGroup.POST("/send-code", api.SendVerificationCode)
 
 	authMiddleware := auth.GetMiddleware()
 	authGroup := apiGroup.Group("/auth")

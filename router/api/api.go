@@ -40,13 +40,13 @@ func SendVerificationCode(ctx *gin.Context) {
 
 var Login func(ctx *gin.Context)
 
-type registerBody struct {
+type superRegisterBody struct {
 	Phone string `json:"phone" binding:"required,len=11"`
 	Role  string `json:"code" binding:"required,gte=0"`
 }
 
 func SuperRegister(ctx *gin.Context) {
-	var param registerBody
+	var param superRegisterBody
 	if err := ctx.ShouldBindBodyWith(&param, binding.JSON); err != nil {
 		utils.Error(ctx, utils.ParamError, err.Error())
 		return
@@ -82,6 +82,30 @@ func SuperRegister(ctx *gin.Context) {
 	} else {
 		utils.Error(ctx, utils.ParamError, err.Error())
 		return
+	}
+}
+
+func Register(ctx *gin.Context) {
+	var param auth.PhoneCodeBody
+	if err := ctx.ShouldBindBodyWith(&param, binding.JSON); err != nil {
+		utils.Error(ctx, utils.ParamError, err.Error())
+		return
+	}
+
+	if err := utils.CodeVerify(param.Phone, param.Code, true); err != nil {
+		utils.Error(ctx, utils.FailedCodeVerify, err.Error())
+		return
+	}
+
+	user := models.IcUser{
+		Phone: param.Phone,
+		Role:  models.CreateRole(models.CustomerUser),
+	}
+
+	if err := models.IcDb().Create(&user).Error; err != nil {
+		utils.Success(ctx, &user)
+	} else {
+		utils.Error(ctx, utils.DatabaseError, err.Error())
 	}
 }
 

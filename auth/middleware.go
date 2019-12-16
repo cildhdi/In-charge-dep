@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"errors"
-	"strconv"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -19,7 +17,7 @@ const (
 	roleKey     = "role"
 )
 
-type loginBody struct {
+type PhoneCodeBody struct {
 	Phone string `json:"phone" binding:"required,len=11"`
 	Code  string `json:"code" binding:"required,len=4"`
 }
@@ -52,28 +50,17 @@ func init() {
 				}
 			},
 			Authenticator: func(ctx *gin.Context) (interface{}, error) {
-				var param loginBody
+				var param PhoneCodeBody
 				if err := ctx.ShouldBindBodyWith(&param, binding.JSON); err != nil {
 					return "", err
 				}
 
-				code, err := strconv.Atoi(param.Code)
-				if err != nil || code < 1000 {
-					return "", errors.New("code is not a number's string format or its value isnt in range")
-				}
-
-				var vc models.VerificationCode
-
-				models.IcDb().Where(&models.VerificationCode{
-					Phone: param.Phone,
-					Code:  uint(code),
-				}).First(&vc)
-				if vc.ID == 0 {
-					return nil, jwt.ErrFailedAuthentication
+				if err := utils.CodeVerify(param.Phone, param.Code, false); err != nil {
+					return "", err
 				}
 
 				user := models.IcUser{
-					Phone: vc.Phone,
+					Phone: param.Phone,
 				}
 				models.IcDb().Where(&user).First(&user)
 

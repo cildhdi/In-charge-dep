@@ -10,6 +10,7 @@ const (
 	ParamError
 	DatabaseError
 	FailedAuthentication
+	FailedCodeVerify
 )
 
 type Response struct {
