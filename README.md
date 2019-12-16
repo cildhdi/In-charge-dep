@@ -1,7 +1,7 @@
 # In-Charge 后端接口说明
 
 ## 返回值约定
-``` json
+``` js
 {
     code: int,
     msg: string,
@@ -21,7 +21,7 @@
 ### POST /api/send-code
 发送验证码
 #### Request
-``` json
+``` js
 {
     phone: string
 }
@@ -31,7 +31,7 @@
 ### POST /api/login
 登录
 #### Request
-``` json
+``` js
 {
     phone: string,
     code: string
@@ -41,7 +41,7 @@
 - code: 短信验证码，仅做 4 位数字校验
 
 #### Response
-``` json
+``` js
 {
     token: string
 }
