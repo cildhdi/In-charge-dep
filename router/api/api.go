@@ -42,7 +42,7 @@ var Login func(ctx *gin.Context)
 
 type superRegisterBody struct {
 	Phone string `json:"phone" binding:"required,len=11"`
-	Role  string `json:"code" binding:"required,gte=0"`
+	Role  string `json:"role" binding:"required,gte=0"`
 }
 
 func SuperRegister(ctx *gin.Context) {
@@ -103,9 +103,9 @@ func Register(ctx *gin.Context) {
 	}
 
 	if err := models.IcDb().Create(&user).Error; err != nil {
-		utils.Success(ctx, &user)
-	} else {
 		utils.Error(ctx, utils.DatabaseError, err.Error())
+	} else {
+		utils.Success(ctx, &user)
 	}
 }
 
