@@ -24,6 +24,20 @@ func init() {
 	db.AutoMigrate(&IcUser{})
 	db.AutoMigrate(&VerificationCode{})
 
+	adminCfg := config.IcCfg().AdminCfg
+	count := 0
+	if err := db.Table("ic_users").Count(&count).Error; err != nil {
+		panic(err)
+	}
+	if count == 0 {
+		su := IcUser{
+			Phone: adminCfg.Phone,
+			Role:  CreateRole(SuperUser),
+		}
+		if err := db.Create(&su).Error; err != nil {
+			panic(err)
+		}
+	}
 }
 
 func IcDb() *gorm.DB {

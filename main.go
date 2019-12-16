@@ -22,7 +22,11 @@ func main() {
 	authMiddleware := auth.GetMiddleware()
 	authGroup := apiGroup.Group("/auth")
 	authGroup.Use(authMiddleware.MiddlewareFunc())
-	authGroup.GET("/test", func(ctx *gin.Context) {
+	authGroup.GET("/reachable", func(ctx *gin.Context) {
+		utils.Success(ctx, nil)
+	})
+
+	authGroup.GET("/unreachable", func(ctx *gin.Context) {
 		utils.Success(ctx, nil)
 	})
 
