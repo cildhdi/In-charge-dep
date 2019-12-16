@@ -1,4 +1,6 @@
-# In-Charge 后端接口说明
+# In-Charge 
+后端 Go，Web端 React + umi.js
+# 后端接口说明
 
 ## 返回值约定
 ``` js
