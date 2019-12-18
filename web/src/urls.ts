@@ -1,8 +1,8 @@
 export default {
-    login: "/api/login POST",
-    register: "/api/register POST",
-    sendCode: "/api/send-code POST",
-    adminRegister: "/api/admin-register POST",
-    reachable: "/api/auth/reachable GET",
-    unreachable: "/api/auth/unreachable GET"
+    login: "POST /api/login",
+    register: "POST /api/register",
+    sendCode: "POST /api/send-code",
+    adminRegister: "POST /api/admin-register",
+    reachable: "GET /api/auth/reachable",
+    unreachable: "GET /api/auth/unreachable"
 };

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Input, message } from 'antd';
 
-import urls from '../urls'
+import urls from '../urls';
+import utils from '../utils';
 
 const sendCodeStatusKey = 'sendCodeStatusKey';
 const loginStatusKey = 'loginStatusKey';
@@ -21,19 +22,17 @@ export default function () {
       message.warn("手机号格式错误");
       return;
     }
-    const hide = message.loading({
+    message.loading({
       content: "验证码发送中...",
       key: sendCodeStatusKey
     });
     try {
-      let response = await fetch(urls.sendCode.split(' ')[0], {
-        method: urls.sendCode.split(' ')[1],
+      let response = await utils.request(urls.sendCode, {
         body: JSON.stringify({
           phone
         })
       });
       if (response.ok && (await response.json()).code == 0) {
-        hide();
         message.success({
           content: "验证码发送成功",
           key: sendCodeStatusKey
@@ -55,13 +54,12 @@ export default function () {
       message.warn("手机号或验证码格式错误");
       return;
     }
-    const hide = message.loading({
+    message.loading({
       content: "登录中...",
       key: loginStatusKey
     });
     try {
-      let response = await fetch(urls.login.split(' ')[0], {
-        method: urls.login.split(' ')[1],
+      let response = await utils.request(urls.login, {
         body: JSON.stringify({
           phone,
           code

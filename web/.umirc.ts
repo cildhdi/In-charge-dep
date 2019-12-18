@@ -7,6 +7,16 @@ const config: IConfig = {
     {
       path: '/',
       component: '../pages/index',
+    },
+    {
+      path: '/admin',
+      component: '../layouts/admin',
+      routes: [
+        {
+          path: '/admin/merchant-register',
+          component: '../pages/admin/merchant-register'
+        }
+      ]
     }
   ],
   plugins: [

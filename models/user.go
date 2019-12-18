@@ -6,7 +6,7 @@ import (
 
 const (
 	CustomerUser = int(iota)
-	MerChantUser
+	MerchantUser
 	AdminUser
 	SuperUser
 )
@@ -14,7 +14,7 @@ const (
 var UserType map[int]string = map[int]string{
 	SuperUser:    "超级用户",
 	AdminUser:    "管理员",
-	MerChantUser: "商家",
+	MerchantUser: "商家",
 	CustomerUser: "顾客",
 }
 
