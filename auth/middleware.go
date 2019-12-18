@@ -36,7 +36,7 @@ func init() {
 				if v, ok := data.(*models.IcUser); ok {
 					return jwt.MapClaims{
 						identityKey: v.Phone,
-						roleKey:     *v.Role,
+						roleKey:     v.Role,
 					}
 				} else {
 					return jwt.MapClaims{}
@@ -46,7 +46,7 @@ func init() {
 				claims := jwt.ExtractClaims(ctx)
 				return &models.IcUser{
 					Phone: claims[identityKey].(string),
-					Role:  models.CreateRole(int(claims[roleKey].(float64))),
+					Role:  int(claims[roleKey].(float64)),
 				}
 			},
 			Authenticator: func(ctx *gin.Context) (interface{}, error) {
@@ -71,9 +71,9 @@ func init() {
 				}
 			},
 			Authorizator: func(data interface{}, ctx *gin.Context) bool {
-				if v, ok := data.(*models.IcUser); ok && RoleCheck(ctx.Request.URL.Path, *v.Role) {
+				if v, ok := data.(*models.IcUser); ok && RoleCheck(ctx.Request.URL.Path, v.Role) {
 					models.IcDb().Where(&v).First(&v)
-					if !(v.ID != 0 && *v.Banned == 0) {
+					if !(v.ID != 0 && v.Banned == 0) {
 						return false
 					}
 					ctx.Set("user", v)

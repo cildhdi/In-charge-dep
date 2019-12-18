@@ -6,6 +6,7 @@ var privileges = map[string][]int{
 	"/api/auth/reachable":   []int{models.SuperUser, models.AdminUser, models.CustomerUser, models.MerChantUser},
 	"/api/auth/unreachable": []int{},
 	"/api/admin-register":   []int{models.SuperUser},
+	"/api/user/all":         []int{models.AdminUser, models.SuperUser},
 }
 
 func RoleCheck(path string, role int) bool {

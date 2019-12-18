@@ -32,7 +32,7 @@ func init() {
 	if count == 0 {
 		su := IcUser{
 			Phone: adminCfg.Phone,
-			Role:  CreateRole(SuperUser),
+			Role:  SuperUser,
 		}
 		if err := db.Create(&su).Error; err != nil {
 			panic(err)

@@ -6,6 +6,7 @@ import (
 	"github.com/cildhdi/In-charge/auth"
 	_ "github.com/cildhdi/In-charge/models"
 	api "github.com/cildhdi/In-charge/router/api"
+	user "github.com/cildhdi/In-charge/router/api/user"
 	"github.com/cildhdi/In-charge/utils"
 )
 
@@ -22,6 +23,9 @@ func main() {
 	authMiddleware := auth.GetMiddleware()
 	apiGroup.Use(authMiddleware.MiddlewareFunc())
 	apiGroup.POST("/admin-register", api.SuperRegister)
+
+	userGroup := apiGroup.Group("/user")
+	userGroup.GET("/all", user.All)
 
 	authGroup := apiGroup.Group("/auth")
 	authGroup.Use(authMiddleware.MiddlewareFunc())

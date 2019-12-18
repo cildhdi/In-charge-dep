@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"strconv"
 
 	"github.com/cildhdi/In-charge/auth"
 	"github.com/cildhdi/In-charge/models"
@@ -42,7 +41,8 @@ var Login func(ctx *gin.Context)
 
 type superRegisterBody struct {
 	Phone string `json:"phone" binding:"required,len=11"`
-	Role  string `json:"role" binding:"required,gte=0"`
+	Role  int    `json:"role" binding:"min=0,max=2"`
+	Name  string `json:"name" binding:"required"`
 }
 
 func SuperRegister(ctx *gin.Context) {
@@ -62,25 +62,21 @@ func SuperRegister(ctx *gin.Context) {
 		return
 	}
 
-	if !(*user.Role == models.SuperUser || *user.Role == models.AdminUser) {
+	if !(user.Role == models.SuperUser || user.Role == models.AdminUser) {
 		utils.Error(ctx, utils.FailedAuthentication, "you don't have permission to access this resource")
 		return
 	}
 
-	if role, err := strconv.Atoi(param.Role); err == nil {
-		newUser := models.IcUser{
-			Phone: param.Phone,
-			Role:  &role,
-		}
-		if err := models.IcDb().Create(&newUser).Error; err != nil {
-			utils.Error(ctx, utils.DatabaseError, err.Error())
-			return
-		} else {
-			utils.Success(ctx, param)
-			return
-		}
+	newUser := models.IcUser{
+		Phone: param.Phone,
+		Role:  param.Role,
+		Name:  param.Name,
+	}
+	if err := models.IcDb().Create(&newUser).Error; err != nil {
+		utils.Error(ctx, utils.DatabaseError, err.Error())
+		return
 	} else {
-		utils.Error(ctx, utils.ParamError, err.Error())
+		utils.Success(ctx, param)
 		return
 	}
 }
@@ -99,7 +95,7 @@ func Register(ctx *gin.Context) {
 
 	user := models.IcUser{
 		Phone: param.Phone,
-		Role:  models.CreateRole(models.CustomerUser),
+		Role:  models.CustomerUser,
 	}
 
 	if err := models.IcDb().Create(&user).Error; err != nil {
