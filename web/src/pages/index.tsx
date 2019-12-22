@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Input, message } from 'antd';
 
-import urls from '../urls';
-import utils from '../utils';
+import { Apis } from '../api';
 
-const sendCodeStatusKey = 'sendCodeStatusKey';
-const loginStatusKey = 'loginStatusKey';
 
 export default function () {
   const [phone, setPhone] = useState("");
@@ -22,24 +19,17 @@ export default function () {
       message.warn("手机号格式错误");
       return;
     }
+    const sendCodeStatusKey = 'sendCodeStatusKey';
     message.loading({
       content: "验证码发送中...",
       key: sendCodeStatusKey
     });
     try {
-      let response = await utils.request(urls.sendCode, {
-        body: JSON.stringify({
-          phone
-        })
+      await Apis.sendCode(phone);
+      message.success({
+        content: "验证码发送成功",
+        key: sendCodeStatusKey
       });
-      if (response.ok && (await response.json()).code == 0) {
-        message.success({
-          content: "验证码发送成功",
-          key: sendCodeStatusKey
-        });
-      } else {
-        throw Error("验证码发送失败");
-      }
     } catch (e) {
       console.log(e);
       message.error({
@@ -54,37 +44,23 @@ export default function () {
       message.warn("手机号或验证码格式错误");
       return;
     }
+
+    const loginStatusKey = 'loginStatusKey';
+
     message.loading({
       content: "登录中...",
       key: loginStatusKey
     });
     try {
-      let response = await utils.request(urls.login, {
-        body: JSON.stringify({
-          phone,
-          code
-        })
+      await Apis.login(phone, code);
+      message.success({
+        content: "登录成功",
+        key: loginStatusKey
       });
-      if (response.ok) {
-        let body = await response.json();
-        console.log(body);
-        if (body.code == 200) {
-          localStorage.setItem("token", body.token);
-          message.success({
-            content: "登录成功",
-            key: loginStatusKey
-          });
-        } else {
-          throw Error("登录失败");
-        }
-      } else {
-        throw Error("登录失败");
-      }
-
     } catch (e) {
       console.log(e);
       message.error({
-        content: "登录失败，请联系管理员",
+        content: "登录失败，身份验证错误",
         key: loginStatusKey
       });
     }

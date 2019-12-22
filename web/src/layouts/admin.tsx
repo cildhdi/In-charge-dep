@@ -31,7 +31,7 @@ const AdminLayout: React.FC = props => {
           <Menu.Item key={menus[2]}><Link to={menus[2]}>用户管理</Link></Menu.Item>
         </Menu >
       </Header >
-      <Content style={{ padding: '50px', marginTop: 64 }}>
+      <Content style={{ padding: '50px', marginTop: 64, minHeight: '500px' }}>
         <div style={{ background: '#fff', padding: 24, height: '100%' }}>{props.children}</div>
       </Content>
       <Footer style={{ textAlign: 'center' }}></Footer>
