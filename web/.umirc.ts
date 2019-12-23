@@ -13,8 +13,8 @@ const config: IConfig = {
       component: '../layouts/admin',
       routes: [
         {
-          path: '/admin/merchant-register',
-          component: '../pages/admin/merchant-register'
+          path: '/admin/merchant-manage',
+          component: '../pages/admin/merchant-manage'
         }
       ]
     }
